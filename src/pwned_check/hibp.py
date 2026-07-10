@@ -2,7 +2,7 @@
 
 import urllib.request
 
-from .checker import count_for_suffix, sha1_hex, split_hash
+from .checker import match_suffix_count, sha1_hex, split_hash
 
 HIBP_RANGE_URL = "https://api.pwnedpasswords.com/range/{prefix}"
 
@@ -17,10 +17,8 @@ def query_hibp(prefix: str) -> str:
 
 def check_password_online(password: str) -> int:
     """Calcula hash, envia só o prefixo e retorna quantas vezes vazou."""
-    full = sha1_hex(password)
-    prefix, suffix = split_hash(full)
-    response = query_hibp(prefix)
-    return count_for_suffix(response, suffix)
+    prefix, suffix = split_hash(sha1_hex(password))
+    return match_suffix_count(query_hibp(prefix), suffix)
 
 
 def load_local_hashes(path: str) -> set:
@@ -28,9 +26,9 @@ def load_local_hashes(path: str) -> set:
     hashes = set()
     with open(path, "r", encoding="utf-8") as fh:
         for line in fh:
-            h = line.strip().upper()
-            if h:
-                hashes.add(h)
+            entry = line.strip().upper()
+            if entry:
+                hashes.add(entry)
     return hashes
 
 

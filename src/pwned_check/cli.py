@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from .checker import sha1_hex, split_hash, count_for_suffix
+from .checker import sha1_hex, split_hash, match_suffix_count
 from .hibp import check_password_offline, check_password_online, load_local_hashes
 
 
@@ -22,23 +22,26 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def build_result_message(count: int) -> str:
+    """Monta a mensagem de saída com base na contagem de vazamentos."""
+    if count > 0:
+        return f"Vazada! Aparece em {count} vazamentos conhecidos."
+    return "Não encontrada em vazamentos conhecidos."
+
+
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
     if args.hash_file:
         hashes = load_local_hashes(args.hash_file)
-        found = check_password_offline(args.password, hashes)
-        if found:
+        if check_password_offline(args.password, hashes):
             print("Vazada (encontrada no arquivo local).")
             return 1
         print("Não encontrada no arquivo local.")
         return 0
 
     count = check_password_online(args.password)
-    if count > 0:
-        print(f"Vazada! Aparece em {count} vazamentos conhecidos.")
-        return 1
-    print("Não encontrada em vazamentos conhecidos.")
-    return 0
+    print(build_result_message(count))
+    return 1 if count > 0 else 0
 
 
 if __name__ == "__main__":
