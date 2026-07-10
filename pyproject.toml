@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pwned-check"
+version = "0.1.0"
+description = "Verificador defensivo de vazamento de senhas (k-anonymity HIBP)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Diogo Damasceno", email = "mitszukyo@gmail.com"}]
+keywords = ["password", "security", "hibp", "k-anonymity", "defensive"]
+
+[project.scripts]
+pwned-check = "pwned_check.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
