@@ -7,7 +7,7 @@ isolável para testes sem rede nem arquivos.
 import hashlib
 
 
-# Comprimento do prefixo enviado à API (modelo k-anonymity da HIBP).
+
 PREFIX_LEN = 5
 
 

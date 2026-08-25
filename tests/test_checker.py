@@ -5,7 +5,7 @@ from pwned_check.hibp import check_password_offline, load_local_hashes
 
 
 def test_sha1_hex_known_value():
-    # SHA-1 de "password" em maiúsculas hex.
+
     assert sha1_hex("password") == "5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8"
 
 
